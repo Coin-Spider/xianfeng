@@ -1,0 +1,70 @@
+# 无修改
+create table cover(
+    coverId bigint primary key not null ,
+    picURL varchar(100) not null
+);
+# 无修改
+create table head(
+    headId bigint primary key not null ,
+    picURL varchar(100) not null
+);
+# 未完成
+create table user(
+    userId bigint primary key auto_increment,
+    nickName varchar(100) not null comment '用户名',
+    userPhone varchar(100) not null comment '用户电话号码',
+    salt varchar(50) not null comment '用户名和电话号码盐分',
+    headId bigint not null comment '头像id'
+);
+# 完成
+create table buy_history(
+    historyId bigint primary key auto_increment,
+    userId bigint not null comment '购买人ID',
+    merchantId bigint not null comment '购买商店ID',
+    buyTime timestamp default current_timestamp comment '成交时间'
+);
+# 完成
+create table buy_history_info(
+    buyInfoId bigint primary key auto_increment,
+    historyId bigint not null ,
+    goodsId bigint not null ,
+    amount int not null comment '购买数量',
+    price decimal(7,2) not null comment '购买时单价'
+);
+
+create table merchant(
+    merchantPhone varchar(100) not null ,
+    merchantId bigint primary key auto_increment,
+    merchantIntroduction varchar(100) default '懒狗，啥都没写' comment '商家介绍',
+    merchantRating int default 3 comment '星级',
+    businessTimeS time default '00:00:00',
+    businessTimeE time default '00:00:00',
+    merchantName varchar(20) not null comment '商家名字',
+    merchantAddress text not null comment '商家地址',
+    coverId bigint default 0
+);
+
+create table goods(
+    goodsId bigint primary key auto_increment,
+    goodsName varchar(20) not null ,
+    goodsPrice decimal(7,2) default 0.0,
+    merchantId bigint not null ,
+    classificationId bigint default -1,
+    coverId bigint default 0,
+    introduction text,
+    goodsStatus int default 1 comment '1：启用；0：关闭',
+    unique key goods_1(goodsName,goodsPrice,merchantId)
+);
+create table goods_info(
+    goodsInfoId bigint primary key auto_increment,
+    goodsId bigint not null comment '商品id',
+    monthlySale bigint default 0 comment '商品月销'
+);
+
+create table review(
+    reviewId bigint primary key auto_increment,
+    userId bigint not null comment '评论者id',
+    headId bigint not null ,
+    reviewContext text not null ,
+    goodsInfoId bigint not null
+)
