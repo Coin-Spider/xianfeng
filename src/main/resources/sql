@@ -5,16 +5,29 @@ create table cover(
 );
 # 无修改
 create table head(
-    headId bigint primary key not null ,
+    headId bigint primary key auto_increment not null ,
     picURL varchar(100) not null
 );
-# 未完成
+
+insert into head (picURL) values ('/home/Rum/Pictures/head/userHead.jpeg');
+create table name_1(
+    nameF varchar(20)
+);
+insert into name_1 values ('爱吃饭'),('爱睡觉');
+create table name_2(
+    nameB varchar(20)
+);
+insert into name_2 values ('小明'),('小华'),('小东');
+
+# 完成
 create table user(
     userId bigint primary key auto_increment,
     nickName varchar(100) not null comment '用户名',
     userPhone varchar(100) not null comment '用户电话号码',
     salt varchar(50) not null comment '用户名和电话号码盐分',
-    headId bigint not null comment '头像id'
+    headId bigint not null default 1 comment '头像id',
+    address varchar(255) not null comment '用户地址（会进行拆分）',
+    foreign key user(headId) references head(headId)
 );
 # 完成
 create table buy_history(
@@ -31,7 +44,7 @@ create table buy_history_info(
     amount int not null comment '购买数量',
     price decimal(7,2) not null comment '购买时单价'
 );
-
+#
 create table merchant(
     merchantPhone varchar(100) not null ,
     merchantId bigint primary key auto_increment,
@@ -64,7 +77,9 @@ create table goods_info(
 create table review(
     reviewId bigint primary key auto_increment,
     userId bigint not null comment '评论者id',
-    headId bigint not null ,
-    reviewContext text not null ,
-    goodsInfoId bigint not null
+    headId bigint not null comment '评论者头像',
+    reviewContext text not null comment '评论文字',
+    goodsInfoId bigint not null comment '商品信息id',
+    nickName varchar(20) comment '用户名字',
+    reviewTime timestamp default current_timestamp comment '评论时间'
 )
